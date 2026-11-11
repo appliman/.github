@@ -1,0 +1,30 @@
+name: Clean up old GHCR images
+
+on:
+  workflow_call:
+    inputs:
+      packages:
+        description: Comma-separated names of the GHCR packages to clean up
+        required: true
+        type: string
+
+permissions:
+  packages: write
+
+jobs:
+  cleanup:
+    name: Delete old GHCR image versions
+    if: github.repository_owner == 'appliman'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Clean up old GHCR images
+        uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
+        with:
+          owner: appliman
+          package: ${{ inputs.packages }}
+          older-than: 30 days
+          delete-tags: '*'
+          exclude-tags: latest,prod,production,staging,preprod,dev,main,master,presentation
+          delete-untagged: true
+          dry-run: 'false'
