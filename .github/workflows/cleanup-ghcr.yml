@@ -7,6 +7,10 @@ on:
         description: Comma-separated names of the GHCR packages to clean up
         required: true
         type: string
+      protected-digests:
+        description: Comma-separated GHCR digests to retain for existing deployments
+        default: ''
+        type: string
 
 permissions:
   packages: write
@@ -25,6 +29,6 @@ jobs:
           package: ${{ inputs.packages }}
           older-than: 30 days
           delete-tags: '*'
-          exclude-tags: latest,prod,production,staging,preprod,dev,main,master,presentation
+          exclude-tags: ${{ format('latest,prod,production,staging,preprod,dev,main,master,presentation{0}', inputs.protected-digests != '' && format(',{0}', inputs.protected-digests) || '') }}
           delete-untagged: true
           dry-run: 'false'
