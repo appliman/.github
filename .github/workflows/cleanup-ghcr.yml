@@ -27,7 +27,7 @@ jobs:
         with:
           owner: appliman
           package: ${{ inputs.packages }}
-          older-than: 30 days
+          older-than: 15 days
           delete-tags: '*'
           exclude-tags: ${{ format('latest,prod,production,staging,preprod,dev,main,master,presentation{0}', inputs.protected-digests != '' && format(',{0}', inputs.protected-digests) || '') }}
           delete-untagged: true
